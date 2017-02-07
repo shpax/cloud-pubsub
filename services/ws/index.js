@@ -1,7 +1,7 @@
 const PubSubService = require('../base');
 const WebSocket = require('ws');
 const auth = require('./auth');
-const res = require('./response');
+const res = require('./../../messages/');
 
 class WsPubSubInterface {
     constructor(port = 8085, channel = 'main') {
@@ -12,7 +12,7 @@ class WsPubSubInterface {
         this.subscriptions = {};
         this.middleware = [];
 
-        // this.use(this.handleAuth);
+        this.use(this.handleAuth);
 
         this.wss.on('connection', ws => {
             do {
@@ -42,7 +42,7 @@ class WsPubSubInterface {
             ws.send(res.status('auth_success', ''));
             return false;
         }
-        ws.send(res.status('auth_error', 'no authorized'));
+        ws.send(res.status('auth_error', 'not authorized'));
         return true;
     }
 
